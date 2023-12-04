@@ -1,16 +1,25 @@
 using API_Treinamento_Auth.auth_settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+using API_Treinamento_Auth.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddDbContext<LoginContext>(options =>
+                           options.UseSqlServer(builder.Configuration.GetConnectionString("SQLConectionString")));
 // Add services to the container.
 
 builder.Services.AddControllers();
 var key = Encoding.ASCII.GetBytes(settings.secret);
+
+
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
